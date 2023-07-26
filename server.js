@@ -1,23 +1,28 @@
 const express = require("express")
 const app = express()
-const port = 8080 
+const port = 8080
+const path = require("path")
+//const cors = require("cors")
 const people = require('./data')
-app.use(express.static('./src'))
+//app.use(cors())
+app.use(express.static('./public'))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+const middleware = express.urlencoded({ extended: false })
+
 
 app.get('/people', (req, res) => {
-  res.status(200).json(people)
+  res.status(200).json({ "success": true, 'message': people })
 })
 
-app.post('/login', (req, res)=>{
-  const {name} = req.body 
-  if(name){
-    return res.status(200).json({success:true, msg:`welcome ${name} `})
+app.post('/login', (req, res) => {
+  const {name} = req.body
+  if (name) {
+    return res.status(200).send(`<h1>welcome ${(name)}</h1>`)
   }
-   return res.status(404).json({success:false, msg:"pls input your name "})
+  console.log(name)
+  return res.status(404).json({ success: false, msg: "pls input your name " })
 })
 
-app.listen(port, ()=>{
+app.listen(port, () => {
   console.log(`server listening on port ${port}`)
 })
